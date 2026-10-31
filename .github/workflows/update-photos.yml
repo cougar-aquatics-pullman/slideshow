@@ -20,7 +20,7 @@ jobs:
           python-version: "3.12"
 
       - name: Read photos from GoMotion
-        run: python scripts/update_photos.py
+        run: python update_photos.py
 
       - name: Show discovered photos
         run: cat photos.json
