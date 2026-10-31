@@ -22,13 +22,13 @@ html, body {
 .ca-slideshow {
   position: relative;
   width: 100%;
+  max-width: 900px;
   aspect-ratio: 16 / 9;
+  margin: 0 auto;
   overflow: hidden;
   background: #20242a;
   border-radius: 8px;
 }
-
-/* Background fills the frame */
 
 .ca-background {
   position: absolute;
@@ -37,8 +37,6 @@ html, body {
   background-position: center;
   filter: blur(20px) brightness(.45);
 }
-
-/* Two layers create smooth transitions */
 
 .ca-slide {
   position: absolute;
@@ -53,8 +51,6 @@ html, body {
 .ca-slide.active {
   opacity: 1;
 }
-
-/* Controls */
 
 .ca-controls {
   position: absolute;
@@ -86,6 +82,11 @@ html, body {
 
 .ca-controls button:hover {
   background: #981e32;
+}
+
+.ca-controls button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
 }
 
 .ca-count {
@@ -128,9 +129,9 @@ html, body {
 
   <div class="ca-controls">
     <div class="ca-buttons">
-      <button id="previous" aria-label="Previous photo">&#10094;</button>
-      <button id="playPause" aria-label="Pause slideshow">&#10074;&#10074;</button>
-      <button id="next" aria-label="Next photo">&#10095;</button>
+      <button id="previous" type="button" aria-label="Previous photo">&#10094;</button>
+      <button id="playPause" type="button" aria-label="Pause slideshow">&#10074;&#10074;</button>
+      <button id="next" type="button" aria-label="Next photo">&#10095;</button>
     </div>
 
     <span class="ca-count" id="counter">1 / 3</span>
@@ -156,6 +157,7 @@ const photos = [
    ============================================= */
 
 const interval = 5000;
+
 let index = 0;
 let playing = true;
 let timer = null;
@@ -196,11 +198,11 @@ function changeSlide(direction) {
     const outgoing = showingA ? slideA : slideB;
 
     incoming.src = photos[nextIndex];
-
     incoming.classList.remove("active");
-    void incoming.offsetWidth;
-    incoming.classList.add("active");
 
+    void incoming.offsetWidth;
+
+    incoming.classList.add("active");
     outgoing.classList.remove("active");
 
     background.style.backgroundImage =
@@ -208,6 +210,7 @@ function changeSlide(direction) {
 
     showingA = !showingA;
     index = nextIndex;
+
     updateCounter();
     scheduleNext();
   };
@@ -244,7 +247,7 @@ playPause.onclick = function () {
   scheduleNext();
 };
 
-/* No catch-up when returning to a tab */
+/* Prevent fast-forward after tab inactivity */
 
 document.addEventListener("visibilitychange", function () {
   if (document.hidden) {
@@ -254,14 +257,14 @@ document.addEventListener("visibilitychange", function () {
   }
 });
 
-/* Swipe support */
+/* Swipe navigation on phones */
 
 let touchStartX = 0;
 
 document.getElementById("slideshow")
   .addEventListener("touchstart", function (e) {
     touchStartX = e.changedTouches[0].screenX;
-  }, {passive: true});
+  }, { passive: true });
 
 document.getElementById("slideshow")
   .addEventListener("touchend", function (e) {
@@ -271,11 +274,12 @@ document.getElementById("slideshow")
     if (Math.abs(difference) > 50) {
       changeSlide(difference < 0 ? 1 : -1);
     }
-  }, {passive: true});
+  }, { passive: true });
 
 /* Initialize */
 
 slideA.src = photos[0];
+
 background.style.backgroundImage =
   'url("' + photos[0] + '")';
 
@@ -286,4 +290,3 @@ scheduleNext();
 
 </body>
 </html>
-
