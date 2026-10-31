@@ -1,0 +1,32 @@
+name: Test Photo Album Sync
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  update-photos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Read photos from GoMotion
+        run: python scripts/update_photos.py
+
+      - name: Show discovered photos
+        run: cat photos.json
+
+      - name: Save test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: slideshow-photos
+          path: photos.json
