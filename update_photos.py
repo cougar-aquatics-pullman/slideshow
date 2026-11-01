@@ -14,7 +14,8 @@ ALBUM_URL = (
 OUTPUT_FILE = Path("photos.json")
 
 # Only use photos from our GoMotion heroes folder.
-PHOTO_FOLDER = "/waca/UserFiles/Image/heros/"
+# PHOTO_FOLDER = "/waca/UserFiles/Image/heros/"
+PHOTO_FOLDER = "/waca/UserFiles/Image/slides/"
 
 
 class PhotoParser(HTMLParser):
